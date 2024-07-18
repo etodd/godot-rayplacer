@@ -42,7 +42,12 @@ func _forward_3d_gui_input(camera: Camera3D, event: InputEvent) -> int:
 			var forward: Vector3 = selected_node.global_basis.x.cross(up)
 			if forward.dot(selected_node.global_basis.z) > 0.0:
 				forward *= -1.0
-			selected_node.global_transform = Transform3D(Basis.looking_at(forward, up), hit["position"])
+			var basis := Basis.looking_at(forward, up)
+			var scale := selected_node.scale
+			basis.x *= scale.x
+			basis.y *= scale.y
+			basis.z *= scale.z
+			selected_node.global_transform = Transform3D(basis, hit["position"])
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 				
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
